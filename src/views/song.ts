@@ -1,5 +1,10 @@
 import { Song, SongRouterContext, SongView, SpecificPitch } from '../types/song.ts';
 
+/**
+ * 楽曲情報のレスポンスを設定する
+ * @param {SongRouterContext} ctx oakのコンテキスト
+ * @param {Song} song 楽曲情報
+ */
 const setSongResponse = (ctx: SongRouterContext, song: Song) => {
   setSongHeader(ctx);
   ctx.response.type = 'application/json';

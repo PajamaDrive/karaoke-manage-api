@@ -1,4 +1,4 @@
-import { Song, SongRouterContext, SongView, SpecificPitch } from '../types/song.ts';
+import { Song, SongRouterContext, SongView, SpecificPitch } from '~/types/song.ts';
 
 /**
  * 楽曲情報のレスポンスを設定する

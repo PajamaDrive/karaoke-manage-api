@@ -1,4 +1,4 @@
-import songReposiroty from '../repositories/songs.ts';
+import songReposiroty from '~/repositories/songs.ts';
 
 /**
  * 楽曲情報を取得する

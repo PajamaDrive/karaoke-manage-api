@@ -16,5 +16,9 @@
     "singleQuote": true,
     "indentWidth": 2,
     "lineWidth": 100
+  },
+  "imports": {
+    "oak/": "https://deno.land/x/oak@v12.6.1/",
+    "~/": "./src/"
   }
 }

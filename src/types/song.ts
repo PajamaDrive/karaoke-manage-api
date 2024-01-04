@@ -1,4 +1,4 @@
-import { RouteParams, RouterContext } from 'https://deno.land/x/oak@v12.6.1/mod.ts';
+import { RouteParams, RouterContext } from 'oak/mod.ts';
 
 const pitches = [
   'A',

@@ -1,6 +1,6 @@
-import songService from '../services/song.ts';
-import { SongRouterContext } from '../types/song.ts';
-import songView from '../views/song.ts';
+import songService from '~/services/song.ts';
+import { SongRouterContext } from '~/types/song.ts';
+import songView from '~/views/song.ts';
 
 /**
  * 楽曲情報を取得する

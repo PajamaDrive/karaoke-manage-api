@@ -1,4 +1,4 @@
-import { Song } from '../types/song.ts';
+import { Song } from '~/types/song.ts';
 
 const songs = Object.freeze<Song[]>([
   {

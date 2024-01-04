@@ -1,5 +1,5 @@
-import { Application } from 'https://deno.land/x/oak@v12.6.1/mod.ts';
-import songRouter from './routes/song.ts';
+import { Application } from 'oak/mod.ts';
+import songRouter from '~/routes/song.ts';
 
 const app = new Application();
 

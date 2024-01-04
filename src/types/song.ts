@@ -1,4 +1,4 @@
-import { RouteParams, RouterContext } from 'oak/mod.ts';
+import { RouteParams, RouterContext } from 'oak';
 
 const pitches = [
   'A',

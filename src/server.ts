@@ -1,4 +1,4 @@
-import { Application } from 'oak/mod.ts';
+import { Application } from 'oak';
 import songRouter from '~/routes/song.ts';
 
 const app = new Application();

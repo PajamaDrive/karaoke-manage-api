@@ -1,4 +1,4 @@
-import { Router } from 'oak/mod.ts';
+import { Router } from 'oak';
 import songController from '~/controllers/song.ts';
 
 const router = new Router();

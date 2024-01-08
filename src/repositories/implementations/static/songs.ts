@@ -2,7 +2,7 @@ import { Song } from '~/types/song.ts';
 import { ISongRepository } from '~/repositories/interfaces/song.ts';
 
 export class StaticSongRepository implements ISongRepository {
-  readonly songs = Object.freeze<Song[]>([
+  private readonly songs = Object.freeze<Song[]>([
     {
       title: '曲名',
       artist: 'アーティスト',

@@ -13,12 +13,19 @@ export class PitchProcessedSongController implements ISongController {
   }
 
   /**
+   * 非同期で行う設定
+   */
+  asyncSetting = async () => {
+    await this.service.asyncSetting();
+  };
+
+  /**
    * 楽曲情報を取得する
    * @param {SongRouterContext} ctx oakのコンテキスト
    */
-  getSong = (ctx: SongRouterContext) => {
+  getSong = async (ctx: SongRouterContext) => {
     const songId = parseInt(ctx.params?.id);
-    const song = this.service.getSong(songId);
+    const song = await this.service.getSong(songId);
     this.view.setSongResponse(ctx, song);
   };
 }

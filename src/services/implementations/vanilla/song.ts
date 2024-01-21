@@ -9,9 +9,16 @@ export class VanillaSongService implements ISongService {
   }
 
   /**
+   * 非同期で行う設定
+   */
+  asyncSetting = async () => {
+    await this.repository.asyncSetting();
+  };
+
+  /**
    * 楽曲情報を取得する
    * @param {number} id 楽曲ID
    * @return {Song} 楽曲情報
    */
-  getSong = (id: number) => this.repository.find(id);
+  getSong = async (id: number) => await this.repository.find(id);
 }

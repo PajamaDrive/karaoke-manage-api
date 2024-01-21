@@ -13,6 +13,9 @@ const songRouter = new SongRouter(
   ),
 );
 
+// 非同期の初期設定
+await songRouter.asyncSetting();
+
 app.use(songRouter.getRouter().routes());
 
 await app.listen({ port: 8000 });

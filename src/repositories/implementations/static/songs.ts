@@ -18,9 +18,14 @@ export class StaticSongRepository implements ISongRepository {
   ]);
 
   /**
+   * 非同期で行う設定
+   */
+  asyncSetting = async () => {};
+
+  /**
    * 楽曲情報を検索する
    * @param {number} id 楽曲ID
-   * @return {Song} 楽曲情報
+   * @return {Promise<Song>} 楽曲情報
    */
-  find = (id: number) => this.songs[id];
+  find = async (id: number) => await this.songs[id];
 }

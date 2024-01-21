@@ -49,6 +49,7 @@ export interface SongView extends Weaken<Song, 'lowestPitch' | 'highestPitch'> {
 
 export type SongRouterContext = RouterContext<string, RouteParams<string>, Record<string, any>>;
 
-export type FindFunc = (id: number) => Song;
-export type ControllerFunc = (ctx: SongRouterContext) => void;
+export type FindFunc = (id: number) => Promise<Song>;
+export type AsyncFunc = () => Promise<void>;
+export type ControllerFunc = (ctx: SongRouterContext) => Promise<void>;
 export type ViewFunc = (ctx: SongRouterContext, song: Song) => void;

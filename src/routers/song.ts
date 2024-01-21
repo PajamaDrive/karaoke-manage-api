@@ -8,7 +8,7 @@ export class SongRouter {
   constructor(controller: ISongController) {
     this.controller = controller;
     this.router = new Router();
-    this.router.get('/songs/:id', this.controller.getSong);
+    this.router.get('/v1/songs/:id', this.controller.getSong);
   }
 
   getRouter = () => this.router;

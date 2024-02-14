@@ -1,3 +1,4 @@
+import { Status } from 'http';
 import { Song, SongRouterContext, SongView, SpecificPitch } from '~/types/song.ts';
 import { ISongView } from '~/views/interfaces/song.ts';
 
@@ -11,6 +12,36 @@ export class PitchProcessedSongView implements ISongView {
     this.setSongHeader(ctx);
     ctx.response.type = 'application/json';
     ctx.response.body = this.getSongBody(song);
+  };
+
+  /**
+   * 楽曲情報のレスポンス（配列）を設定する
+   * @param {SongRouterContext} ctx oakのコンテキスト
+   * @param {Array<Song>} songs 楽曲情報
+   */
+  setSongsResponse = (ctx: SongRouterContext, songs: Array<Song>) => {
+    this.setSongHeader(ctx);
+    ctx.response.type = 'application/json';
+    ctx.response.body = songs.map((song) => this.getSongBody(song));
+  };
+
+  /**
+   * 楽曲情報のレスポンス（リソース作成）を設定する
+   * @param {SongRouterContext} ctx oakのコンテキスト
+   * @param {Song} song 楽曲情報
+   */
+  setCreateResponse = (ctx: SongRouterContext, song: Song) => {
+    this.setSongResponse(ctx, song);
+    ctx.response.status = Status.Created;
+  };
+
+  /**
+   * 楽曲情報のレスポンス（コンテンツなし）を設定する
+   * @param {SongRouterContext} ctx oakのコンテキスト
+   */
+  setNoContentResponse = (ctx: SongRouterContext) => {
+    this.setSongHeader(ctx);
+    ctx.response.status = Status.NoContent;
   };
 
   /**

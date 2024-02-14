@@ -32,11 +32,14 @@ export interface SpecificPitch {
 }
 
 export interface Song {
+  id: string;
   title: string;
   artist: string;
   lowestPitch: SpecificPitch;
   highestPitch: SpecificPitch;
 }
+
+export type SongWithoutId = Omit<Song, 'id'>;
 
 type Weaken<T, K extends keyof T> = {
   [P in keyof T]: P extends K ? any : T[P];
@@ -49,7 +52,14 @@ export interface SongView extends Weaken<Song, 'lowestPitch' | 'highestPitch'> {
 
 export type SongRouterContext = RouterContext<string, RouteParams<string>, Record<string, any>>;
 
-export type FindFunc = (id: number) => Promise<Song>;
+export type FetchFunc = (id: string) => Promise<Song>;
+export type FetchAllFunc = () => Promise<Array<Song>>;
+export type InsertFunc = (song: SongWithoutId) => Promise<Song>;
+export type UpdateFunc = (id: string, song: SongWithoutId) => Promise<Song>;
+export type DeleteFunc = (id: string) => Promise<void>;
 export type AsyncFunc = () => Promise<void>;
 export type ControllerFunc = (ctx: SongRouterContext) => Promise<void>;
 export type ViewFunc = (ctx: SongRouterContext, song: Song) => void;
+export type ViewAllFunc = (ctx: SongRouterContext, songs: Array<Song>) => void;
+export type ViewCreateFunc = ViewFunc;
+export type ViewNoContentFunc = (ctx: SongRouterContext) => void;

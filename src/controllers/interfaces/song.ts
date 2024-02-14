@@ -7,4 +7,8 @@ export interface ISongController {
   readonly view: ISongView;
   asyncSetting: AsyncFunc;
   getSong: ControllerFunc;
+  getSongs: ControllerFunc;
+  postSong: ControllerFunc;
+  putSong: ControllerFunc;
+  deleteSong: ControllerFunc;
 }

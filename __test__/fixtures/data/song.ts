@@ -1,6 +1,7 @@
 import type { Song } from '~/types/song.ts';
 
-export const dummySong: Song = {
+export const dummySong = Object.freeze<Song>({
+  id: 'ID 1',
   title: '曲名',
   artist: 'アーティスト',
   lowestPitch: {
@@ -11,4 +12,9 @@ export const dummySong: Song = {
     pitch: 'B',
     octave: 'hi',
   },
-};
+});
+
+export const dummySongs = Object.freeze<Song[]>([
+  { ...dummySong },
+  { ...dummySong, id: 'ID 2' },
+]);

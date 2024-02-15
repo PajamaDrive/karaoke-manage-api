@@ -1,5 +1,6 @@
 import { ISongService } from '~/services/interfaces/song.ts';
 import { ISongRepository } from '~/repositories/interfaces/song.ts';
+import { DeleteFunc, SongWithoutId } from '~/types/song.ts';
 
 export class MockSongService implements ISongService {
   readonly repository;
@@ -9,6 +10,9 @@ export class MockSongService implements ISongService {
   }
 
   asyncSetting = async () => {};
-
-  getSong = async (id: number) => await this.repository.find(id);
+  getSong = async (id: string) => await this.repository.fetch(id);
+  getSongs = async () => await this.repository.fetchAll();
+  postSong = async (song: SongWithoutId) => await this.repository.insert(song);
+  updateSong = async (id: string, song: SongWithoutId) => await this.repository.update(id, song);
+  deleteSong = async (id: string) => await this.repository.delete(id);
 }

@@ -21,7 +21,8 @@
     "oak": "https://deno.land/x/oak@v12.6.1/mod.ts",
     "http": "https://deno.land/std@0.200.0/http/http_status.ts",
     "test/": "https://deno.land/std@0.210.0/testing/",
-    "ulid": "https://deno.land/x/ulid/mod.ts",
+    "assert/": "https://deno.land/std@0.210.0/assert/",
+    "ulid": "https://deno.land/x/ulid@v0.3.0/mod.ts",
     "~/": "./src/"
   }
 }

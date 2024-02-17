@@ -2,7 +2,7 @@ import { VanillaSongService } from '~/services/implementations/vanilla/song.ts';
 import { MockSongRepository } from '../../fixtures/mocks/songRepository.ts';
 import { dummySong, dummySongs } from '../../fixtures/data/song.ts';
 import { assertEquals } from 'assert/assert_equals.ts';
-import { assertSpyCall, assertSpyCalls, resolvesNext, restore, spy, stub } from 'test/mock.ts';
+import { assertSpyCall, assertSpyCalls, restore, spy, stub } from 'test/mock.ts';
 import { assertRejects } from 'assert/assert_rejects.ts';
 
 const songRepository = new MockSongRepository();
@@ -35,7 +35,9 @@ Deno.test('getSong', async (t) => {
   await t.step('例外がスローされる - エラーが発生', async () => {
     // spyを解除
     restore();
-    stub(songRepository, spyFuncName, resolvesNext([new Error('error')]));
+    stub(songRepository, spyFuncName, async () => {
+      throw new Error('error');
+    });
 
     await assertRejects(() => songService.getSong(dummyId), Error);
   });
@@ -57,7 +59,9 @@ Deno.test('getSongs', async (t) => {
   await t.step('例外がスローされる - エラーが発生', async () => {
     // spyを解除
     restore();
-    stub(songRepository, spyFuncName, resolvesNext([new Error('error')]));
+    stub(songRepository, spyFuncName, async () => {
+      throw new Error('error');
+    });
 
     await assertRejects(() => songService.getSongs(), Error);
   });
@@ -79,7 +83,9 @@ Deno.test('postSong', async (t) => {
   await t.step('例外がスローされる - エラーが発生', async () => {
     // spyを解除
     restore();
-    stub(songRepository, spyFuncName, resolvesNext([new Error('error')]));
+    stub(songRepository, spyFuncName, async () => {
+      throw new Error('error');
+    });
 
     await assertRejects(() => songService.postSong(dummySong), Error);
   });
@@ -102,7 +108,9 @@ Deno.test('updateSong', async (t) => {
   await t.step('例外がスローされる - エラーが発生', async () => {
     // spyを解除
     restore();
-    stub(songRepository, spyFuncName, resolvesNext([new Error('error')]));
+    stub(songRepository, spyFuncName, async () => {
+      throw new Error('error');
+    });
 
     await assertRejects(() => songService.updateSong(id, dummySong), Error);
   });
@@ -123,7 +131,7 @@ Deno.test('deleteSong', async (t) => {
   await t.step('例外がスローされる - エラーが発生', async () => {
     // spyを解除
     restore();
-    stub(songRepository, spyFuncName, () => {
+    stub(songRepository, spyFuncName, async () => {
       throw new Error('error');
     });
 

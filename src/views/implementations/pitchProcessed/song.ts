@@ -1,6 +1,7 @@
 import { Status } from 'oak';
 import { Song, SongRouterContext, SongView, SpecificPitch } from '~/types/song.ts';
 import { ISongView } from '~/views/interfaces/song.ts';
+import { CustomError } from '~/libs/CustomError.ts';
 
 export class PitchProcessedSongView implements ISongView {
   /**
@@ -42,6 +43,29 @@ export class PitchProcessedSongView implements ISongView {
   setNoContentResponse = (ctx: SongRouterContext) => {
     this.setSongHeader(ctx);
     ctx.response.status = Status.NoContent;
+  };
+
+  /**
+   * 楽曲情報のレスポンス（エラー発生時）を設定する
+   * @param {SongRouterContext} ctx oakのコンテキスト
+   * @param {Error} error エラーオブジェクト
+   */
+  setErrorResponse = (ctx: SongRouterContext, error: Error) => {
+    this.setSongHeader(ctx);
+    if (error instanceof CustomError) {
+      ctx.response.status = error.statusCode;
+      ctx.response.type = 'application/json';
+      ctx.response.body = {
+        message: error.message,
+      };
+    } else {
+      ctx.response.status = Status.InternalServerError;
+      ctx.response.type = 'application/json';
+      ctx.response.body = {
+        message: error.message,
+        stack: error.stack,
+      };
+    }
   };
 
   /**

@@ -25,8 +25,13 @@ export class PitchProcessedSongController implements ISongController {
    */
   getSong = async (ctx: SongRouterContext) => {
     const songId = ctx.params?.id;
-    const song = await this.service.getSong(songId);
-    this.view.setSongResponse(ctx, song);
+    await this.service.getSong(songId)
+      .then((song) => {
+        this.view.setSongResponse(ctx, song);
+      })
+      .catch((error) => {
+        this.view.setErrorResponse(ctx, error);
+      });
   };
 
   /**
@@ -34,8 +39,13 @@ export class PitchProcessedSongController implements ISongController {
    * @param {SongRouterContext} ctx oakのコンテキスト
    */
   getSongs = async (ctx: SongRouterContext) => {
-    const songs = await this.service.getSongs();
-    this.view.setSongsResponse(ctx, songs);
+    await this.service.getSongs()
+      .then((songs) => {
+        this.view.setSongsResponse(ctx, songs);
+      })
+      .catch((error) => {
+        this.view.setErrorResponse(ctx, error);
+      });
   };
 
   /**
@@ -45,8 +55,13 @@ export class PitchProcessedSongController implements ISongController {
   postSong = async (ctx: SongRouterContext) => {
     const bodyResult = ctx.request.body({ type: 'json' });
     const songWithoutId = await bodyResult.value as SongWithoutId;
-    const createdSong = await this.service.postSong(songWithoutId);
-    this.view.setCreateResponse(ctx, createdSong);
+    await this.service.postSong(songWithoutId)
+      .then((song) => {
+        this.view.setCreateResponse(ctx, song);
+      })
+      .catch((error) => {
+        this.view.setErrorResponse(ctx, error);
+      });
   };
 
   /**
@@ -57,8 +72,13 @@ export class PitchProcessedSongController implements ISongController {
     const songId = ctx.params?.id;
     const bodyResult = ctx.request.body({ type: 'json' });
     const songWithoutId = await bodyResult.value as SongWithoutId;
-    const updatedSong = await this.service.updateSong(songId, songWithoutId);
-    this.view.setCreateResponse(ctx, updatedSong);
+    await this.service.updateSong(songId, songWithoutId)
+      .then((song) => {
+        this.view.setCreateResponse(ctx, song);
+      })
+      .catch((error) => {
+        this.view.setErrorResponse(ctx, error);
+      });
   };
 
   /**
@@ -67,7 +87,12 @@ export class PitchProcessedSongController implements ISongController {
    */
   deleteSong = async (ctx: SongRouterContext) => {
     const songId = ctx.params?.id;
-    await this.service.deleteSong(songId);
-    this.view.setNoContentResponse(ctx);
+    await this.service.deleteSong(songId)
+      .then(() => {
+        this.view.setNoContentResponse(ctx);
+      })
+      .catch((error) => {
+        this.view.setErrorResponse(ctx, error);
+      });
   };
 }

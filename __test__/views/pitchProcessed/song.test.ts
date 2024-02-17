@@ -3,7 +3,9 @@ import { dummySong, dummySongs } from '../../fixtures/data/song.ts';
 import { assertEquals } from 'assert/assert_equals.ts';
 import { Status, testing } from 'oak';
 import type { SongView } from '~/types/song.ts';
+import { CustomError } from '~/libs/CustomError.ts';
 
+const songView = new PitchProcessedSongView();
 Deno.test('setSongResponse', async (t) => {
   await t.step('200が返る - 正常終了', () => {
     const expectBody = Object.freeze<SongView>({
@@ -12,7 +14,6 @@ Deno.test('setSongResponse', async (t) => {
       highestPitch: 'hiB',
     });
     const dummyContext = testing.createMockContext();
-    const songView = new PitchProcessedSongView();
 
     songView.setSongResponse(dummyContext, dummySong);
 
@@ -37,7 +38,6 @@ Deno.test('setSongsResponse', async (t) => {
       },
     ]);
     const dummyContext = testing.createMockContext();
-    const songView = new PitchProcessedSongView();
 
     songView.setSongsResponse(dummyContext, structuredClone(dummySongs));
 
@@ -54,7 +54,6 @@ Deno.test('setCreateResponse', async (t) => {
       highestPitch: 'hiB',
     });
     const dummyContext = testing.createMockContext();
-    const songView = new PitchProcessedSongView();
 
     songView.setCreateResponse(dummyContext, dummySong);
 
@@ -71,10 +70,39 @@ Deno.test('setNoContentResponse', async (t) => {
       highestPitch: 'hiB',
     });
     const dummyContext = testing.createMockContext();
-    const songView = new PitchProcessedSongView();
 
     songView.setNoContentResponse(dummyContext);
 
     assertEquals(dummyContext.response.status, Status.NoContent);
+  });
+});
+
+Deno.test('setErrorResponse', async (t) => {
+  await t.step('500が返る - Errorオブジェクトが渡される', () => {
+    const dummyError = new Error('error');
+    const expectBody = Object.freeze({
+      message: dummyError.message,
+      stack: dummyError.stack,
+    });
+    const dummyContext = testing.createMockContext();
+
+    songView.setErrorResponse(dummyContext, dummyError);
+
+    assertEquals(dummyContext.response.body, expectBody);
+    assertEquals(dummyContext.response.status, Status.InternalServerError);
+  });
+
+  await t.step('指定したステータスコードが返る - CustomErrorオブジェクトが渡される', () => {
+    const statusCode = Status.BadRequest;
+    const dummyError = new CustomError(statusCode, 'error');
+    const expectBody = Object.freeze({
+      message: dummyError.message,
+    });
+    const dummyContext = testing.createMockContext();
+
+    songView.setErrorResponse(dummyContext, dummyError);
+
+    assertEquals(dummyContext.response.body, expectBody);
+    assertEquals(dummyContext.response.status, statusCode);
   });
 });

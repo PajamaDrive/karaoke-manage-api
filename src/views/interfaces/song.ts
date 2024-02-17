@@ -1,8 +1,15 @@
-import { ViewAllFunc, ViewCreateFunc, ViewFunc, ViewNoContentFunc } from '~/types/song.ts';
+import {
+  ViewCreateFunc,
+  ViewErrorFunc,
+  ViewNoContentFunc,
+  ViewSongFunc,
+  ViewSongsFunc,
+} from '~/types/song.ts';
 
 export interface ISongView {
-  setSongResponse: ViewFunc;
-  setSongsResponse: ViewAllFunc;
+  setSongResponse: ViewSongFunc;
+  setSongsResponse: ViewSongsFunc;
   setCreateResponse: ViewCreateFunc;
   setNoContentResponse: ViewNoContentFunc;
+  setErrorResponse: ViewErrorFunc;
 }

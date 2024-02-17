@@ -1,4 +1,4 @@
-import { Song, SongRouterContext } from '~/types/song.ts';
+import { Song, SongRouterContext, ViewErrorFunc } from '~/types/song.ts';
 import { ISongView } from '~/views/interfaces/song.ts';
 
 export class MockSongView implements ISongView {
@@ -12,4 +12,7 @@ export class MockSongView implements ISongView {
     ctx.response.body = song;
   };
   setNoContentResponse = (ctx: SongRouterContext) => {};
+  setErrorResponse = (ctx: SongRouterContext, error: Error) => {
+    ctx.response.body = error.message;
+  };
 }

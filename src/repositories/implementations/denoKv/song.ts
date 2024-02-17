@@ -1,6 +1,8 @@
 import { Song, SongWithoutId } from '~/types/song.ts';
 import { ISongRepository } from '~/repositories/interfaces/song.ts';
 import { ulid } from 'ulid';
+import { CustomError } from '~/libs/CustomError.ts';
+import { Status } from 'oak';
 
 export class DenoKvSongRepository implements ISongRepository {
   private kv: Deno.Kv | null = null;
@@ -10,7 +12,10 @@ export class DenoKvSongRepository implements ISongRepository {
    * 非同期で行う設定
    */
   async asyncSetting() {
-    this.kv = await Deno.openKv();
+    this.kv = await Deno.openKv()
+      .catch((err) => {
+        throw err;
+      });
   }
 
   /**
@@ -20,14 +25,18 @@ export class DenoKvSongRepository implements ISongRepository {
    */
   fetch = async (id: string) => {
     if (!this.kv) {
-      throw new Error('Deno KV is not initialized.');
+      throw new CustomError(Status.InternalServerError, 'Deno KV is not initialized.');
     }
 
-    const song = (await this.kv.get<Song>([this.DenoKvPrefix, id])).value;
+    const song = await this.kv.get<Song>([this.DenoKvPrefix, id])
+      .then(({ value }) => value)
+      .catch((err) => {
+        throw err;
+      });
 
     // nullの場合はエラー
     if (!song) {
-      throw new Error(`Song ID '${id}' is not found.`);
+      throw new CustomError(Status.NotFound, `Song ID '${id}' is not found.`);
     }
 
     return song;
@@ -40,7 +49,7 @@ export class DenoKvSongRepository implements ISongRepository {
    */
   fetchAll = async () => {
     if (!this.kv) {
-      throw new Error('Deno KV is not initialized.');
+      throw new CustomError(Status.InternalServerError, 'Deno KV is not initialized.');
     }
 
     const iter = this.kv.list<Song>({ prefix: [this.DenoKvPrefix] });
@@ -57,13 +66,16 @@ export class DenoKvSongRepository implements ISongRepository {
    */
   insert = async (song: SongWithoutId) => {
     if (!this.kv) {
-      throw new Error('Deno KV is not initialized.');
+      throw new CustomError(Status.InternalServerError, 'Deno KV is not initialized.');
     }
 
     const id = ulid();
     const songWithId = { id, ...song };
 
-    await this.kv.set([this.DenoKvPrefix, id], songWithId);
+    await this.kv.set([this.DenoKvPrefix, id], songWithId)
+      .catch((err) => {
+        throw err;
+      });
 
     return songWithId;
   };
@@ -76,12 +88,18 @@ export class DenoKvSongRepository implements ISongRepository {
    */
   update = async (id: string, song: SongWithoutId) => {
     if (!this.kv) {
-      throw new Error('Deno KV is not initialized.');
+      throw new CustomError(Status.InternalServerError, 'Deno KV is not initialized.');
     }
+
+    // 更新する前に楽曲情報が存在するか確認
+    await this.fetch(id);
 
     const songWithId = { id, ...song };
 
-    await this.kv.set([this.DenoKvPrefix, id], songWithId);
+    await this.kv.set([this.DenoKvPrefix, id], songWithId)
+      .catch((err) => {
+        throw err;
+      });
 
     return songWithId;
   };
@@ -92,9 +110,15 @@ export class DenoKvSongRepository implements ISongRepository {
    */
   delete = async (id: string) => {
     if (!this.kv) {
-      throw new Error('Deno KV is not initialized.');
+      throw new CustomError(Status.InternalServerError, 'Deno KV is not initialized.');
     }
 
-    await this.kv.delete([this.DenoKvPrefix, id]);
+    // 削除する前に楽曲情報が存在するか確認
+    await this.fetch(id);
+
+    await this.kv.delete([this.DenoKvPrefix, id])
+      .catch((err) => {
+        throw err;
+      });
   };
 }

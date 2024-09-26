@@ -5,7 +5,7 @@ export class SongRouter {
   private readonly controller;
   private readonly router;
 
-  constructor(controller: ISongController) {
+  private constructor(controller: ISongController) {
     this.controller = controller;
     this.router = new Router();
     this.router.get('/v1/song', this.controller.getSongs);
@@ -16,11 +16,15 @@ export class SongRouter {
   }
 
   /**
-   * 非同期で行う設定
+   * インスタンスを生成する
+   * @param {ISongController} controller controllerのインスタンス
+   * @return {SongRouter} routerのインスタンス
    */
-  asyncSetting = async () => {
-    await this.controller.asyncSetting();
-  };
+  static build = (controller: ISongController) => new SongRouter(controller);
 
+  /**
+   * oakのrouterを返す
+   * @return {Router} router
+   */
   getRouter = () => this.router;
 }

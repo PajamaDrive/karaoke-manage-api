@@ -6,15 +6,12 @@ import { PitchProcessedSongView } from '~/views/implementations/pitchProcessed/s
 import { DenoKvSongRepository } from '~/repositories/implementations/denoKv/song.ts';
 
 const app = new Application();
-const songRouter = new SongRouter(
-  new PitchProcessedSongController(
-    new VanillaSongService(new DenoKvSongRepository()),
-    new PitchProcessedSongView(),
+const songRouter = SongRouter.build(
+  await PitchProcessedSongController.build(
+    await VanillaSongService.build(await DenoKvSongRepository.build()),
+    await PitchProcessedSongView.build(),
   ),
 );
-
-// 非同期の初期設定
-await songRouter.asyncSetting();
 
 app.use(songRouter.getRouter().routes());
 

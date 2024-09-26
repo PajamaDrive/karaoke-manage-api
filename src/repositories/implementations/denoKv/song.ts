@@ -1,22 +1,34 @@
 import { Song, SongWithoutId } from '~/types/song.ts';
-import { ISongRepository } from '~/repositories/interfaces/song.ts';
+import { ISongRepository, ISongRepositoryBuilder } from '~/repositories/interfaces/song.ts';
 import { ulid } from 'ulid';
 import { CustomError } from '~/libs/CustomError.ts';
 import { Status } from 'oak';
 
-export class DenoKvSongRepository implements ISongRepository {
+class _DenoKvSongRepository implements ISongRepository {
   private kv: Deno.Kv | null = null;
   private readonly DenoKvPrefix = 'songs';
 
+  private constructor() {}
+
   /**
-   * 非同期で行う設定
+   * Deno KVの初期設定を行う
    */
-  async asyncSetting() {
+  private setKv = async () => {
     this.kv = await Deno.openKv()
       .catch((err) => {
         throw err;
       });
-  }
+  };
+
+  /**
+   * インスタンスを生成する
+   * @return {Promise<_DenoKvSongRepository>} repositoryのインスタンス
+   */
+  static build = async () => {
+    const songRepository = new _DenoKvSongRepository();
+    await songRepository.setKv();
+    return songRepository;
+  };
 
   /**
    * 楽曲情報を1件取得する
@@ -122,3 +134,5 @@ export class DenoKvSongRepository implements ISongRepository {
       });
   };
 }
+
+export const DenoKvSongRepository: ISongRepositoryBuilder = _DenoKvSongRepository;

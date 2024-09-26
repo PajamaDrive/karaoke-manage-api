@@ -57,7 +57,6 @@ export type FetchAllFunc = () => Promise<Array<Song>>;
 export type InsertFunc = (song: SongWithoutId) => Promise<Song>;
 export type UpdateFunc = (id: string, song: SongWithoutId) => Promise<Song>;
 export type DeleteFunc = (id: string) => Promise<void>;
-export type AsyncFunc = () => Promise<void>;
 export type ControllerFunc = (ctx: SongRouterContext) => Promise<void>;
 export type ViewSongFunc = (ctx: SongRouterContext, song: Song) => void;
 export type ViewSongsFunc = (ctx: SongRouterContext, songs: Array<Song>) => void;

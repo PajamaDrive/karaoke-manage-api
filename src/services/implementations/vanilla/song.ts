@@ -1,20 +1,21 @@
-import { ISongService } from '~/services/interfaces/song.ts';
+import { ISongService, ISongServiceBuilder } from '~/services/interfaces/song.ts';
 import { ISongRepository } from '~/repositories/interfaces/song.ts';
 import { SongWithoutId } from '~/types/song.ts';
 
-export class VanillaSongService implements ISongService {
+class _VanillaSongService implements ISongService {
   readonly repository;
 
-  constructor(repository: ISongRepository) {
+  private constructor(repository: ISongRepository) {
     this.repository = repository;
   }
 
   /**
-   * 非同期で行う設定
+   * インスタンスを生成する
+   * @param {ISongRepository} repository repositoryのインスタンス
+   * @return {Promise<_VanillaSongService>} serviceのインスタンス
    */
-  asyncSetting = async () => {
-    await this.repository.asyncSetting();
-  };
+  static build = async (repository: ISongRepository) =>
+    await Promise.resolve(new _VanillaSongService(repository));
 
   /**
    * 楽曲情報1件を取得する
@@ -65,3 +66,5 @@ export class VanillaSongService implements ISongService {
       throw err;
     });
 }
+
+export const VanillaSongService: ISongServiceBuilder = _VanillaSongService;

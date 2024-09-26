@@ -13,3 +13,7 @@ export interface ISongView {
   setNoContentResponse: ViewNoContentFunc;
   setErrorResponse: ViewErrorFunc;
 }
+
+export interface ISongViewBuilder {
+  build: () => Promise<ISongView>;
+}

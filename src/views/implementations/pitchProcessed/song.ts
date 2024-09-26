@@ -1,9 +1,17 @@
 import { Status } from 'oak';
 import { Song, SongRouterContext, SongView, SpecificPitch } from '~/types/song.ts';
-import { ISongView } from '~/views/interfaces/song.ts';
+import { ISongView, ISongViewBuilder } from '~/views/interfaces/song.ts';
 import { CustomError } from '~/libs/CustomError.ts';
 
-export class PitchProcessedSongView implements ISongView {
+class _PitchProcessedSongView implements ISongView {
+  private constructor() {}
+
+  /**
+   * インスタンスを生成する
+   * @return {Promise<_PitchProcessedSongView>} viewのインスタンス
+   */
+  static build = async () => await Promise.resolve(new _PitchProcessedSongView());
+
   /**
    * 楽曲情報のレスポンスを設定する
    * @param {SongRouterContext} ctx oakのコンテキスト
@@ -96,3 +104,5 @@ export class PitchProcessedSongView implements ISongView {
    */
   private getPitchString = (pitch: SpecificPitch) => `${pitch.octave}${pitch.pitch}`;
 }
+
+export const PitchProcessedSongView: ISongViewBuilder = _PitchProcessedSongView;

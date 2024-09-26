@@ -9,16 +9,7 @@ import { testing } from 'oak';
 
 const songService = new MockSongService(new MockSongRepository());
 const songView = new MockSongView();
-const songController = new PitchProcessedSongController(songService, songView);
-Deno.test('asyncSetting', async (t) => {
-  await t.step('serviceのasyncSettingが呼ばれる - 正常実行', async () => {
-    const asyncSettingSpy = spy(songService, 'asyncSetting');
-
-    await songController.asyncSetting();
-
-    assertSpyCalls(asyncSettingSpy, 1);
-  });
-});
+const songController = await PitchProcessedSongController.build(songService, songView);
 
 Deno.test('getSong', async (t) => {
   const dummyId = 'ID 1';

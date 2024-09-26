@@ -6,17 +6,7 @@ import { assertSpyCall, assertSpyCalls, restore, spy, stub } from 'test/mock.ts'
 import { assertRejects } from 'assert/assert_rejects.ts';
 
 const songRepository = new MockSongRepository();
-const songService = new VanillaSongService(songRepository);
-
-Deno.test('asyncSetting', async (t) => {
-  await t.step('repositoryのasyncSettingが呼ばれる - 正常実行', async () => {
-    const asyncSettingSpy = spy(songRepository, 'asyncSetting');
-
-    await songService.asyncSetting();
-
-    assertSpyCalls(asyncSettingSpy, 1);
-  });
-});
+const songService = await VanillaSongService.build(songRepository);
 
 Deno.test('getSong', async (t) => {
   const dummyId = 'ID 1';

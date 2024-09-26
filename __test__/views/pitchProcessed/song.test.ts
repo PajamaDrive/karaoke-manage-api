@@ -5,7 +5,8 @@ import { Status, testing } from 'oak';
 import type { SongView } from '~/types/song.ts';
 import { CustomError } from '~/libs/CustomError.ts';
 
-const songView = new PitchProcessedSongView();
+const songView = await PitchProcessedSongView.build();
+
 Deno.test('setSongResponse', async (t) => {
   await t.step('200が返る - 正常終了', () => {
     const expectBody = Object.freeze<SongView>({

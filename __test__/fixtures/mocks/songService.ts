@@ -9,7 +9,6 @@ export class MockSongService implements ISongService {
     this.repository = repository;
   }
 
-  asyncSetting = async () => {};
   getSong = async (id: string) => await this.repository.fetch(id);
   getSongs = async () => await this.repository.fetchAll();
   postSong = async (song: SongWithoutId) => await this.repository.insert(song);
